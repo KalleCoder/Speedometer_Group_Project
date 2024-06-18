@@ -8,7 +8,7 @@ namespace Setting
 
         namespace Buffer
         {
-            constexpr int buffer_size = 3;
+            constexpr int buffer_size = 4;
         }
 
         namespace Speed

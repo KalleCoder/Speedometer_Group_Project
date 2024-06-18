@@ -7,25 +7,26 @@
 class COMService
 {
 private:
-    uint8_t buffer[4]{0};
-
-    int tempratureActive;
-    int SpeedActive;
-    int ChargeActive;
-    bool BlinkerActive;
+    uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0};
 
 public:
-    int get_Speed(uint8_t *buffer);
+    void set_Speed(int speed);
 
-    int get_Temp(uint8_t *buffer);
+    void set_Temp(int temp);
 
-    bool get_battery_level(uint8_t *buffer);
+    void set_battery_level(int percentage);
 
-    bool get_right_signal(uint8_t *buffer);
+    void set_left_signal(bool signal);
 
-    bool get_left_signal(uint8_t *buffer);
+    void set_right_signal(bool signal);
 
-    bool get_warning_signal(uint8_t *buffer);
+    void set_warning_signal(bool signal);
+
+    void buffer_insert(uint32_t value, size_t bit_pos, size_t bit_length);
+
+    virtual void run() = 0;
+
+    virtual ~COMService() = 0;
 };
 
 #endif // COMSERVICE_H

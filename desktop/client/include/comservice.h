@@ -4,13 +4,14 @@
 #include <cstdint>
 #include <cstring>
 #include <atomic>
+#include "setting.h"
 
 // Abstract base class defining the communication service interface
 class COMService
 {
     std::atomic<bool> communication_status = false;
 
-    uint8_t buffer[4]{0}; // PROTECT WITH MUTEX
+    uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0}; // PROTECT WITH MUTEX
 
 public:
     int get_speed();         // Read speed from the buffer
