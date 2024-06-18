@@ -14,7 +14,6 @@ int COMService::get_speed()
 
 int COMService::get_temperature()
 {
-    int length = 6;
     uint32_t value = buffer_extract(Setting::Signal::Temperature::start, Setting::Signal::Temperature::length);
 
     uint32_t sign_bit = (value >> (Setting::Signal::Temperature::length - 1)) & 0x01;

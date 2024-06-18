@@ -7,10 +7,10 @@ int main(int argc, char **argv)
 #ifdef CAN
     QApplication app(argc, argv);
 
-    TCPService service;
+    // TCPService service;
 
-    Window window(service);
-    window.show();
+    // Window window(service);
+    // window.show();
 
     return app.exec();
 #endif
@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 #ifdef TCIP
     QApplication app(argc, argv);
 
-    TCPService service;
+    // TCPService service;
 
-    Window window(service);
-    window.show();
+    // Window window(service);
+    // window.show();
 
     return app.exec();
 #endif

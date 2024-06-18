@@ -30,7 +30,7 @@ public:
 };
 
 #endif // COMSERVICE_H
-
+/*
 void buffer_insert(uint8_t *buf, uint32_t value, size_t bit_pos, size_t bit_length)
 {
     size_t byte_pos = bit_pos / 8;
@@ -49,4 +49,4 @@ void buffer_insert(uint8_t *buf, uint32_t value, size_t bit_pos, size_t bit_leng
     {
         buf[byte_pos + i] |= static_cast<uint8_t>((value >> (i * 8)) << bit_offset); // Insert bits into buffer
     }
-}
+} */
