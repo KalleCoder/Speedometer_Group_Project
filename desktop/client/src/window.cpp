@@ -1,7 +1,7 @@
 #include "window.h"
 
 // Window(COMService &comservise)
-Window::Window()
+Window::Window(COMService &comsrv) : comservice{comsrv}
 {
     setWindowTitle("client");
     setFixedSize(800, 560);
@@ -19,11 +19,11 @@ Window::Window()
 /// HERE YOU SHOULD USE THE COMSERVICE FUNCTIONS TO GET THE VALUES!
 void Window::update()
 {
-    canvas.set_connection_status(true);
-    canvas.set_speed(0);
-    canvas.set_battery_percentage(0);
-    canvas.set_temperature(0);
-    canvas.set_blinker_left(false);
-    canvas.set_blinker_right(false);
-    canvas.set_blinker_warning(false);
+    canvas.set_connection_status(comservice.get_status());
+    canvas.set_speed(comservice.get_speed());
+    canvas.set_battery_percentage(comservice.get_battery_level());
+    canvas.set_temperature(comservice.get_temperature());
+    canvas.set_blinker_left(comservice.get_left_signal());
+    canvas.set_blinker_right(comservice.get_right_signal());
+    canvas.set_blinker_warning(comservice.get_warning_signal());
 }

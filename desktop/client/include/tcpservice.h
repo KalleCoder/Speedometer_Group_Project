@@ -5,6 +5,7 @@
 
 class TCPService : public COMService
 {
+    void run() override;
 };
 
 #endif

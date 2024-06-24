@@ -1,21 +1,27 @@
-#include "include/window.h"
+#include "window.h"
+#include "tcpservice.h"
 #include <QApplication>
 
 int main(int argc, char **argv)
 {
-#ifdef CAN
+#ifdef TCP
     QApplication app(argc, argv);
 
-    Window window;
+    TCPService service;
+    Window window(service);
+    window.update();
     window.show();
 
     return app.exec();
 #endif
 
-#ifdef TCIP
+#ifndef TCP
     QApplication app(argc, argv);
 
-    Window window;
+    TCPService service;
+    Window window(service);
+
+    window.update();
     window.show();
 
     return app.exec();

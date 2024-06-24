@@ -4,7 +4,6 @@
 #include "canvas.h"
 #include "comservice.h"
 #include <QDialog>
-#include "comservice.h"
 #include <QVBoxLayout>
 
 // here you have an instance of canvas
@@ -13,15 +12,18 @@
 // and use the canvas module to draw the information
 class Window : public QDialog
 {
+    COMService &comservice;
+
 private:
     Canvas canvas;
     QVBoxLayout layout;
 
 public:
-    // Window(COMService &comservise)
-    Window();
+    Window(COMService &comsrv);
+    // Window();
 
     void update();
+    // void update(COMService &comservice);
 };
 
 #endif

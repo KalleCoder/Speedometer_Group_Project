@@ -65,11 +65,14 @@ Window::Window(COMService &comsrvc) : comservice{comsrvc}
 
     // Update value labels with actual value
     connect(&speedSlider, &QSlider::valueChanged, this, [this](int value)
-            { speedValue.setText(QString::number(value) + " kph"); });
+            { speedValue.setText(QString::number(value) + " kph"); 
+            comservice.set_Speed(value); });
     connect(&temperatureSlider, &QSlider::valueChanged, this, [this](int value)
-            { temperatureValue.setText(QString::number(value) + " °C"); });
+            { temperatureValue.setText(QString::number(value) + " °C"); 
+            comservice.set_Temp(value); });
     connect(&batterySlider, &QSlider::valueChanged, this, [this](int value)
-            { batteryValue.setText(QString::number(value) + " %"); });
+            { batteryValue.setText(QString::number(value) + " %"); 
+            comservice.set_battery_level(value); });
 
     // Set layout
     setLayout(&mainLayout);

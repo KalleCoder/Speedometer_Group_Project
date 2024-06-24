@@ -17,17 +17,13 @@ endif()
 ##############################
 
 # Define the variable that will be used to toggle features
-option(TCIP "Enable TCIP" OFF)
+option(TCP "Enable TCP" OFF)
 
-# cmake -DTCIP=ON ..
-# make
-
-option(CAN "Enable CAN" OFF)
-# cmake -DCAN=ON ..
+# cmake -DTCP=ON ..
 # make
 
 #dont forget 
-# cmake -DCAN=OFF .. when you want to remove it
+# cmake -DTCPOFF .. when you want to remove it
 
 ## MAKING THE CLIENT
 
@@ -50,12 +46,10 @@ target_link_libraries(client PUBLIC Qt6::Core Qt6::Widgets)
 target_include_directories(client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/desktop/client/include shared)
 
 # Conditionally add compile definitions for Client
-if(CAN)
-    target_compile_definitions(client PRIVATE CAN)
-endif()
 
-if(TCIP)
-    target_compile_definitions(client PRIVATE TCIP)
+
+if(TCP)
+    target_compile_definitions(client PRIVATE TCP)
 endif()
 
 
@@ -78,12 +72,8 @@ target_link_libraries(server PUBLIC Qt6::Core Qt6::Widgets)
 # Include the header files directory
 target_include_directories(server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/desktop/server/include shared)
 
-if(CAN)
-    target_compile_definitions(server PRIVATE CAN)
-endif()
-
-if(TCIP)
-    target_compile_definitions(server PRIVATE TCIP)
+if(TCP)
+    target_compile_definitions(server PRIVATE TCP)
 endif()
 
 

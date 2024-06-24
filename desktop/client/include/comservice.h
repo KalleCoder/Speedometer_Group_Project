@@ -9,6 +9,7 @@
 // Abstract base class defining the communication service interface
 class COMService
 {
+protected:
     std::atomic<bool> communication_status = false;
 
     uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0}; // PROTECT WITH MUTEX

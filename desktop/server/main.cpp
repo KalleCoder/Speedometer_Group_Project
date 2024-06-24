@@ -4,24 +4,27 @@
 
 int main(int argc, char **argv)
 {
-#ifdef CAN
+#ifdef TCP
     QApplication app(argc, argv);
 
-    // TCPService service;
+    TCPService service;
 
-    // Window window(service);
-    // window.show();
+    Window window(service);
+    window.update();
+    window.show();
 
     return app.exec();
 #endif
-
-#ifdef TCIP
+#ifndef TCP
     QApplication app(argc, argv);
 
-    // TCPService service;
+    TCPService service;
 
-    // Window window(service);
-    // window.show();
+    Window window(service);
+    window.update();
+    window.show();
+
+    // service.run(); // THIS NEEDS A THREAD!
 
     return app.exec();
 #endif

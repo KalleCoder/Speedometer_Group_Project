@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cstring>
 
+COMService::~COMService() = default; // Define the virtual destructor
+
 // Pure virtual functions for client side functionalities
 int COMService::get_speed()
 {

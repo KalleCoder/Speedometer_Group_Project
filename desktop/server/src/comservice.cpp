@@ -1,6 +1,8 @@
 #include "comservice.h"
 #include "setting.h"
 
+COMService::~COMService() = default; // Define the virtual destructor
+
 void COMService::set_Speed(int speed)
 {
     buffer_insert(static_cast<uint32_t>(speed), Setting::Signal::Speed::start, Setting::Signal::Speed::length);
