@@ -49,14 +49,22 @@ void TCPService::run()
         exit(EXIT_FAILURE);
     }
 
-    // Reading data
-    read(new_socket, buffer, 4);
-    std::cout << "Data received: ";
-    for (int i = 0; i < 4; i++)
+    // Sending buffer with mutex protection
     {
-        std::cout << static_cast<int>(buffer[i]) << " ";
+        std::lock_guard<std::mutex> lock(buffer_mutex);
+        std::cout << "Sending data: ";
+        for (size_t i = 0; i < sizeof(buffer); i++)
+        {
+            std::cout << static_cast<int>(buffer[i]) << " ";
+        }
+        std::cout << std::endl;
+
+        // Sending buffer to client
+        if (write(new_socket, buffer, sizeof(buffer)) < 0)
+        {
+            perror("write failed");
+        }
     }
-    std::cout << std::endl;
 
     close(new_socket);
     close(server_fd);

@@ -1,4 +1,6 @@
 #include "window.h"
+#include <QMetaObject>
+#include <QObject>
 
 Window::Window(COMService &comsrvc) : comservice{comsrvc}
 {
@@ -56,6 +58,10 @@ Window::Window(COMService &comsrvc) : comservice{comsrvc}
             right.setEnabled(true);
             warning.setEnabled(true);
         }
+
+        comservice.set_left_signal(left.isChecked());
+        comservice.set_right_signal(right.isChecked());
+        comservice.set_warning_signal(warning.isChecked());
     };
 
     // Connect checkboxes
@@ -65,8 +71,9 @@ Window::Window(COMService &comsrvc) : comservice{comsrvc}
 
     // Update value labels with actual value
     connect(&speedSlider, &QSlider::valueChanged, this, [this](int value)
-            { speedValue.setText(QString::number(value) + " kph"); 
-            comservice.set_Speed(value); });
+            { speedValue.setText(QString::number(value) + " kph");
+           comservice.set_Speed(value); });
+
     connect(&temperatureSlider, &QSlider::valueChanged, this, [this](int value)
             { temperatureValue.setText(QString::number(value) + " °C"); 
             comservice.set_Temp(value); });

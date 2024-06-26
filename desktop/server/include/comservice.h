@@ -3,11 +3,14 @@
 #include "setting.h"
 #include <stdint.h>
 #include <cstddef>
+#include <mutex>
 
 class COMService
 {
 protected:
     uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0};
+    std::mutex buffer_mutex; // Mutex to protect the buffer
+    std::mutex setter_mutex; // Mutex to protect the buffer
 
 public:
     void set_Speed(int speed);

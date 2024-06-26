@@ -1,6 +1,8 @@
 #include <QApplication>
 #include "window.h"
 #include "tcpservice.h"
+#include <thread>
+#include <QTimer>
 
 int main(int argc, char **argv)
 {
@@ -21,10 +23,10 @@ int main(int argc, char **argv)
     TCPService service;
 
     Window window(service);
-    window.update();
-    window.show();
+    std::thread tcpThread(&TCPService::run, &service);
+    tcpThread.detach();
 
-    // service.run(); // THIS NEEDS A THREAD!
+    window.show();
 
     return app.exec();
 #endif
