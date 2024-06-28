@@ -49,7 +49,7 @@ void TCPService::run()
         exit(EXIT_FAILURE);
     }
 
-    // Sending buffer with mutex protection
+    while (true) // Sending buffer with mutex protection
     {
         std::lock_guard<std::mutex> lock(buffer_mutex);
         std::cout << "Sending data: ";

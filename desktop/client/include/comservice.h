@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstring>
 #include <atomic>
+#include <mutex>
 #include "setting.h"
 
 // Abstract base class defining the communication service interface
@@ -13,6 +14,9 @@ protected:
     std::atomic<bool> communication_status = false;
 
     uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0}; // PROTECT WITH MUTEX
+
+    std::mutex buffer_mutex; // Mutex to protect the buffer
+    std::mutex getter_mutex; // Mutex to protect the buffer
 
 public:
     int get_speed();         // Read speed from the buffer

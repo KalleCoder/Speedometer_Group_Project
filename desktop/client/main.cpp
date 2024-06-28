@@ -1,6 +1,19 @@
 #include "window.h"
 #include "tcpservice.h"
+#include <thread>
 #include <QApplication>
+#include <QTimer>
+
+void setup(Window &window)
+{
+    constexpr int interval = 20; // 20 milliseconds
+
+    QTimer *timer = new QTimer(&window); // Timer will be deleted with window
+    QObject::connect(timer, &QTimer::timeout, [&window]()
+                     { window.update(); });
+
+    timer->start(interval);
+}
 
 int main(int argc, char **argv)
 {
@@ -20,8 +33,12 @@ int main(int argc, char **argv)
 
     TCPService service;
     Window window(service);
+    std::thread tcpThread(&TCPService::run, &service);
+    tcpThread.detach();
 
-    window.update();
+    setup(window);
+    // window.update();
+
     window.show();
 
     return app.exec();
