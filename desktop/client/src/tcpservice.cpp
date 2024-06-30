@@ -35,19 +35,9 @@ void TCPService::run()
         return;
     }
 
-    /* { // Sending data
-        std::lock_guard<std::mutex> lock(buffer_mutex);
-        send(sock, buffer, 4, 0);
-        std::cout << "Data sent: ";
-        for (int i = 0; i < 4; i++)
-        {
-            std::cout << static_cast<int>(buffer[i]) << " ";
-        }
-        std::cout << std::endl;
-    } */
-
     while (true)
     { // Receiving data
+
         std::lock_guard<std::mutex> lock(buffer_mutex);
         int bytes_received = recv(sock, buffer, sizeof(buffer), 0);
         if (bytes_received <= 0)
@@ -59,13 +49,18 @@ void TCPService::run()
         else
         {
             communication_status = true;
-            std::cout << "Data received: ";
-            for (int i = 0; i < bytes_received; i++)
-            {
-                std::cout << static_cast<int>(buffer[i]) << " ";
-            }
-            std::cout << std::endl;
         }
+
+        /*   std::cout << "Buffer contents (binary): ";
+          for (size_t i = 0; i < 4; ++i)
+          {
+              for (int j = 7; j >= 0; --j)
+              {
+                  std::cout << ((buffer[i] >> j) & 1);
+              }
+              std::cout << " ";
+          }
+          std::cout << std::endl; */
     }
 
     close(sock);

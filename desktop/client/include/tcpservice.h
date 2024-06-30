@@ -7,6 +7,8 @@ class TCPService : public COMService
 {
 public:
     void run() override;
+
+    void processReceivedData();
 };
 
 #endif

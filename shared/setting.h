@@ -37,19 +37,19 @@ namespace Setting
 
         namespace Blinker_Left
         {
-            constexpr int start = 23;
+            constexpr int start = 22;
             constexpr int length = 1;
         }
 
         namespace Blinker_Right
         {
-            constexpr int start = 24;
+            constexpr int start = 23;
             constexpr int length = 1;
         }
 
         namespace Blinker_Warning
         {
-            constexpr int start = 25;
+            constexpr int start = 24;
             constexpr int length = 1;
         }
     }

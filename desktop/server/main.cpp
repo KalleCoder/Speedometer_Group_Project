@@ -3,6 +3,7 @@
 #include "tcpservice.h"
 #include <thread>
 #include <QTimer>
+#include <iostream>
 
 int main(int argc, char **argv)
 {

@@ -1,6 +1,7 @@
 #include "window.h"
 #include <QMetaObject>
-#include <QObject>
+// #include <QObject>
+#include <iostream>
 
 Window::Window(COMService &comsrvc) : comservice{comsrvc}
 {
@@ -77,9 +78,10 @@ Window::Window(COMService &comsrvc) : comservice{comsrvc}
     connect(&temperatureSlider, &QSlider::valueChanged, this, [this](int value)
             { temperatureValue.setText(QString::number(value) + " °C"); 
             comservice.set_Temp(value); });
+
     connect(&batterySlider, &QSlider::valueChanged, this, [this](int value)
             { batteryValue.setText(QString::number(value) + " %"); 
-            comservice.set_battery_level(value); });
+            comservice.set_battery_level(value); }); // THIS WORKS!!
 
     // Set layout
     setLayout(&mainLayout);

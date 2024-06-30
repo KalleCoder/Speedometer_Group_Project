@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 
 COMService::~COMService() = default; // Define the virtual destructor
 
@@ -33,7 +34,11 @@ int COMService::get_battery_level()
     std::lock_guard<std::mutex> lock(getter_mutex);
     uint32_t battery_level = buffer_extract(Setting::Signal::Battery::start, Setting::Signal::Battery::length);
 
-    return static_cast<int>(battery_level);
+    int battery = static_cast<int>(battery_level);
+
+    // std::cout << "Here is the recieved battery: " << battery << std::endl;
+
+    return battery;
 }
 bool COMService::get_left_signal()
 {
@@ -58,7 +63,12 @@ bool COMService::get_warning_signal()
     return static_cast<bool>(warning_signal);
 }
 
-uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
+bool COMService::get_status()
+{
+    return communication_status;
+}
+
+/* uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
 {
     std::lock_guard<std::mutex> lock(buffer_mutex);
     size_t byte_pos = bit_pos / 8;
@@ -74,9 +84,27 @@ uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
     value &= (1u << bit_length) - 1;
 
     return value;
-}
+} */
 
-bool COMService::get_status()
+uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
 {
-    return communication_status;
+    std::lock_guard<std::mutex> lock(buffer_mutex);
+
+    uint32_t value = 0;
+
+    // Extract the value bit by bit
+    for (size_t i = 0; i < bit_length; ++i)
+    {
+        int current_bit_index = bit_pos + i;
+        int byte_index = current_bit_index / 8;
+        int bit_in_byte = current_bit_index % 8;
+
+        // Read the bit and set it in the value
+        if (buffer[byte_index] & (1 << bit_in_byte))
+        {
+            value |= (1 << (bit_length - 1 - i));
+        }
+    }
+
+    return value;
 }
