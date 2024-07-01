@@ -34,11 +34,7 @@ int COMService::get_battery_level()
     std::lock_guard<std::mutex> lock(getter_mutex);
     uint32_t battery_level = buffer_extract(Setting::Signal::Battery::start, Setting::Signal::Battery::length);
 
-    int battery = static_cast<int>(battery_level);
-
-    // std::cout << "Here is the recieved battery: " << battery << std::endl;
-
-    return battery;
+    return static_cast<int>(battery_level);
 }
 bool COMService::get_left_signal()
 {
@@ -68,43 +64,22 @@ bool COMService::get_status()
     return communication_status;
 }
 
-/* uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
-{
-    std::lock_guard<std::mutex> lock(buffer_mutex);
-    size_t byte_pos = bit_pos / 8;
-    size_t bit_offset = bit_pos % 8;
-
-    uint32_t value = 0;
-    for (size_t i = 0; i < (bit_length + 7) / 8; ++i)
-    {
-        value |= static_cast<uint32_t>(buffer[byte_pos + i]) << (i * 8); // PROTECT WITH MUTEX!!
-    }
-
-    value >>= bit_offset;
-    value &= (1u << bit_length) - 1;
-
-    return value;
-} */
-
 uint32_t COMService::buffer_extract(size_t bit_pos, size_t bit_length)
 {
-    std::lock_guard<std::mutex> lock(buffer_mutex);
+    uint32_t result = 0;
 
-    uint32_t value = 0;
-
-    // Extract the value bit by bit
+    // Extract bits from the buffer
     for (size_t i = 0; i < bit_length; ++i)
     {
-        int current_bit_index = bit_pos + i;
-        int byte_index = current_bit_index / 8;
-        int bit_in_byte = current_bit_index % 8;
+        size_t current_bit = bit_pos + i;
+        size_t byte_index = current_bit / 8;
+        size_t bit_index = current_bit % 8;
 
-        // Read the bit and set it in the value
-        if (buffer[byte_index] & (1 << bit_in_byte))
+        if (buffer[byte_index] & (1 << (7 - bit_index)))
         {
-            value |= (1 << (bit_length - 1 - i));
+            result |= (1 << i);
         }
     }
 
-    return value;
+    return result;
 }

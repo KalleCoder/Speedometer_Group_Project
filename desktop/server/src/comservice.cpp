@@ -73,53 +73,36 @@ void COMService::set_warning_signal(bool signal)
     buffer_insert(static_cast<uint32_t>(signal), Setting::Signal::Blinker_Warning::start, Setting::Signal::Blinker_Warning::length);
 }
 
-/* void COMService::buffer_insert(uint32_t value, size_t bit_pos, size_t bit_length)
-{
-    std::lock_guard<std::mutex> lock(buffer_mutex);
-    size_t byte_pos = bit_pos / 8;
-    size_t bit_offset = bit_pos % 8;
-
-    value &= (1u << bit_length) - 1; // Mask to ensure only 'bit_length' bits are considered
-
-    // Clear bits in buffer to be replaced
-    for (size_t i = 0; i < (bit_length + 7) / 8; ++i)
-    {
-        buffer[byte_pos + i] &= ~(((1u << (8 - bit_offset)) - 1) << bit_offset); // Clear bits from bit_offset to end of byte
-    }
-
-    // Insert value into buffer
-    for (size_t i = 0; i < (bit_length + 7) / 8; ++i)
-    {
-        buffer[byte_pos + i] |= static_cast<uint8_t>((value >> (i * 8)) << bit_offset); // Insert bits into buffer
-    }
-} */
-
 void COMService::buffer_insert(uint32_t value, size_t start_bit, size_t bit_length)
 {
-    std::lock_guard<std::mutex> lock(buffer_mutex);
+    size_t end_bit = start_bit + bit_length - 1;
 
-    // Ensure that the bit length is valid and fits within a single byte
-    if (bit_length == 0 || start_bit + bit_length > 32)
+    // Clear the target bits in the buffer
+    for (size_t i = start_bit; i <= end_bit; ++i)
     {
-        std::cerr << "Invalid bit range or length" << std::endl;
-        return;
+        size_t byte_index = i / 8;
+        size_t bit_index = i % 8;
+
+        buffer[byte_index] &= ~(1 << (7 - bit_index)); // Clear the bit
     }
 
-    // Place the value bit by bit
+    // Place the number into the buffer
     for (size_t i = 0; i < bit_length; ++i)
     {
-        // Calculate the bit index and the byte index
-        int current_bit_index = start_bit + i;
-        int byte_index = current_bit_index / 8;
-        int bit_in_byte = current_bit_index % 8;
+        size_t current_bit = start_bit + i;
+        size_t byte_index = current_bit / 8;
+        size_t bit_index = current_bit % 8;
 
-        // Clear the bit at the current position
-        buffer[byte_index] &= ~(1 << bit_in_byte);
-
-        // Set the bit with the current value bit
-        if ((value & (1 << (bit_length - 1 - i))) != 0)
+        if (value & (1 << i))
         {
-            buffer[byte_index] |= (1 << bit_in_byte);
+            buffer[byte_index] |= (1 << (7 - bit_index)); // Set the bit
         }
     }
+
+    for (int i = 0; i < 4; ++i)
+    {
+        std::bitset<8> bits(buffer[i]);
+        std::cout << bits << " ";
+    }
+    std::cout << std::endl;
 }
