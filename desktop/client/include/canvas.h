@@ -14,13 +14,13 @@
 class Canvas : public QWidget
 {
 private:
-    int class_speed = 70;
+    int class_speed = 0;
     int temperature = 0;
     int battery_percentage = 0;
     bool connection = false;
     bool blinker_left = false;
     bool blinker_right = false;
-    bool blinker_warning = true;
+    bool blinker_warning = false;
 
     QPainter painter;
 
@@ -50,7 +50,7 @@ private:
 
     void paint_temperature(int temp);
 
-    void paint_light_signal();
+    void paint_light_signal(bool left, bool right, bool warning);
 
     void paint_no_connection();
 };

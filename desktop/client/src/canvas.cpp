@@ -1,4 +1,5 @@
 #include "canvas.h"
+#include <iostream>
 
 void Canvas::set_speed(int speed)
 {
@@ -47,7 +48,7 @@ void Canvas::paintEvent(QPaintEvent *)
         paint_speed(class_speed);
         paint_battery(battery_percentage);
         paint_temperature(temperature);
-        paint_light_signal();
+        paint_light_signal(blinker_left, blinker_right, blinker_warning);
     }
     else
     {
@@ -349,28 +350,34 @@ void Canvas::paint_temperature(int temp)
     painter.drawText(QRect(690 + 10, 510, 50, 30), Qt::AlignCenter, tempText);
 }
 
-void Canvas::paint_light_signal()
+void Canvas::paint_light_signal(bool left, bool right, bool warning)
 {
     QFont font("Material Icons", 50);
     painter.setFont(font);
 
     painter.setPen(QPen(Qt::green));
 
-    if (blinker_left)
+    std::cout << "Painting blinkers" << std::endl;
+
+    if (left == true)
     {
         // Define the battery icon character from Material Icons font
         QString left_icon = QChar(0xE5C4); // Replace with actual Unicode if different
 
         painter.drawText(QPointF(50, 100), left_icon); // Adjust as needed
+
+        std::cout << "Painted left blinker" << std::endl;
     }
-    else if (blinker_right)
+    else if (right == true)
     {
         // Define the battery icon character from Material Icons font
         QString right_icon = QChar(0xE5C8); // Replace with actual Unicode if different
 
         painter.drawText(QPointF(580, 100), right_icon); // Adjust as needed
+
+        std::cout << "Painted right blinker" << std::endl;
     }
-    else if (blinker_warning)
+    else if (warning == true)
     {
         // Define the battery icon character from Material Icons font
         QString left_icon = QChar(0xE5C4);
@@ -380,6 +387,8 @@ void Canvas::paint_light_signal()
         QString right_icon = QChar(0xE5C8);
 
         painter.drawText(QPointF(580, 100), right_icon);
+
+        std::cout << "Painted warning blinker" << std::endl;
     }
     else
     {
