@@ -1,5 +1,24 @@
 #include "canvas.h"
 #include <iostream>
+#include <QTimer>
+
+Canvas::Canvas()
+{
+    // Initialize the QTimer making the blinker blink
+    auto timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this]()
+            { blinker_visible = !blinker_visible; 
+            // Play the sound effect for the blinker
+        /* if (blinkerSound) {
+            blinkerSound->play();
+        } */ });
+    timer->start(500); // 500 milliseconds = 0.5 seconds
+
+    /*     // Initialize the QMediaPlayer object with the path to your sound file
+        blinkerSound = new QMediaPlayer(this);
+        blinkerSound->setSource(QUrl("qrc:/sounds/blinker.wav"));
+        blinkerSound->setVolume(0.5); // Adjust volume as needed */
+}
 
 void Canvas::set_speed(int speed)
 {
@@ -28,12 +47,12 @@ void Canvas::set_blinker_left(bool mode)
 
 void Canvas::set_blinker_right(bool mode)
 {
-    blinker_left = mode;
+    blinker_right = mode;
 }
 
 void Canvas::set_blinker_warning(bool mode)
 {
-    blinker_left = mode;
+    blinker_warning = mode;
 }
 
 void Canvas::paintEvent(QPaintEvent *)
@@ -42,13 +61,21 @@ void Canvas::paintEvent(QPaintEvent *)
 
     painter.setRenderHint(QPainter::Antialiasing); // Enable antialiasing
 
-    // speed needle ## MOVE THIS PART TO THE WINDOW!
     if (connection)
     {
         paint_speed(class_speed);
         paint_battery(battery_percentage);
         paint_temperature(temperature);
-        paint_light_signal(blinker_left, blinker_right, blinker_warning);
+        // paint_light_signal(blinker_left, blinker_right, blinker_warning);
+
+        if (blinker_visible)
+        {
+            paint_light_signal(blinker_left, blinker_right, blinker_warning);
+        }
+        else
+        {
+            paint_light_signal(false, false, false);
+        }
     }
     else
     {
@@ -358,8 +385,24 @@ void Canvas::paint_light_signal(bool left, bool right, bool warning)
     painter.setPen(QPen(Qt::green));
 
     std::cout << "Painting blinkers" << std::endl;
+    std::cout << "Left bool: " << left << std::endl;
+    std::cout << "Right bool: " << right << std::endl;
+    std::cout << "Warning bool: " << warning << std::endl;
 
-    if (left == true)
+    if (warning == true)
+    {
+        // Define the battery icon character from Material Icons font
+        QString left_icon = QChar(0xE5C4);
+
+        painter.drawText(QPointF(50, 100), left_icon);
+
+        QString right_icon = QChar(0xE5C8);
+
+        painter.drawText(QPointF(580, 100), right_icon);
+
+        std::cout << "Painted warning blinker" << std::endl;
+    }
+    else if (left == true)
     {
         // Define the battery icon character from Material Icons font
         QString left_icon = QChar(0xE5C4); // Replace with actual Unicode if different
@@ -376,19 +419,6 @@ void Canvas::paint_light_signal(bool left, bool right, bool warning)
         painter.drawText(QPointF(580, 100), right_icon); // Adjust as needed
 
         std::cout << "Painted right blinker" << std::endl;
-    }
-    else if (warning == true)
-    {
-        // Define the battery icon character from Material Icons font
-        QString left_icon = QChar(0xE5C4);
-
-        painter.drawText(QPointF(50, 100), left_icon);
-
-        QString right_icon = QChar(0xE5C8);
-
-        painter.drawText(QPointF(580, 100), right_icon);
-
-        std::cout << "Painted warning blinker" << std::endl;
     }
     else
     {

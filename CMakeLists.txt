@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Multimedia)
 
 #INSTALL FONTS
 if(NOT EXISTS "$ENV{HOME}/.local/share/fonts/MaterialIcons.ttf")
@@ -39,7 +39,7 @@ set(SOURCES_CLIENT
 add_executable(client ${SOURCES_CLIENT})
 
 # Link the Qt6 Widgets library to your application
-target_link_libraries(client PUBLIC Qt6::Core Qt6::Widgets)
+target_link_libraries(client PUBLIC Qt6::Core Qt6::Widgets Qt6::Multimedia)
 
 
 # Include the header files directory

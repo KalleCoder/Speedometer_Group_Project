@@ -52,34 +52,11 @@ void TCPService::run()
     while (true) // Sending buffer with mutex protection
     {
         std::lock_guard<std::mutex> lock(buffer_mutex);
-        /* std::cout << "Sending data: ";
-        for (size_t i = 0; i < sizeof(buffer); i++)
-        {
-            std::cout << static_cast<int>(buffer[i]) << " ";
-        }
-        std::cout << std::endl; */
-
-        // Sending buffer to client
-        /* if (write(new_socket, buffer, sizeof(buffer)) < 0)
-        {
-            perror("write failed");
-        } */
 
         if (send(new_socket, buffer, sizeof(buffer), 0) < 0)
         {
             std::cerr << "Send failed!" << std::endl;
         }
-
-        /* std::cout << "Buffer contents (binary): ";
-        for (size_t i = 0; i < 4; ++i)
-        {
-            for (int j = 7; j >= 0; --j)
-            {
-                std::cout << ((buffer[i] >> j) & 1);
-            }
-            std::cout << " ";
-        }
-        std::cout << std::endl; */
     }
 
     close(new_socket);

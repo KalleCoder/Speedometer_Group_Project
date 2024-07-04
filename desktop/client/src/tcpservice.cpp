@@ -50,17 +50,6 @@ void TCPService::run()
         {
             communication_status = true;
         }
-
-        /*   std::cout << "Buffer contents (binary): ";
-          for (size_t i = 0; i < 4; ++i)
-          {
-              for (int j = 7; j >= 0; --j)
-              {
-                  std::cout << ((buffer[i] >> j) & 1);
-              }
-              std::cout << " ";
-          }
-          std::cout << std::endl; */
     }
 
     close(sock);
