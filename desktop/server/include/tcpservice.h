@@ -1,5 +1,5 @@
-#ifndef TCPCOM_H
-#define TCPCOM_H
+#ifndef TCPSERVICE_H
+#define TCPSERVICE_H
 
 #include "comservice.h"
 
