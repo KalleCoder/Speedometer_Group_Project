@@ -29,10 +29,10 @@ void TCPService::run()
         return;
     }
 
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    while (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         std::cerr << "Connection Failed" << std::endl;
-        return;
+        // return;
     }
 
     while (true)
