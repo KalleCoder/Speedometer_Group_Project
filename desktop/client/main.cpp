@@ -47,7 +47,7 @@ int main(int argc, char **argv)
                              {
         while (true)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            std::this_thread::sleep_for(std::chrono::milliseconds(20)); // why this sleep?
             window.update();  // Call the update method
         } });
 
