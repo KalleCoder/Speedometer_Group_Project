@@ -21,18 +21,6 @@ void setup(Window &window)
 
 int main(int argc, char **argv)
 {
-#ifdef TCP
-    QApplication app(argc, argv);
-
-    TCPService service;
-    Window window(service);
-    window.update();
-    window.show();
-
-    return app.exec();
-#endif
-
-#ifndef TCP
     QApplication app(argc, argv);
 
     TCPService service;
@@ -47,7 +35,7 @@ int main(int argc, char **argv)
                              {
         while (true)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(20)); // why this sleep?
+            //std::this_thread::sleep_for(std::chrono::milliseconds(20)); // why this sleep?
             window.update();  // Call the update method
         } });
 
@@ -56,5 +44,4 @@ int main(int argc, char **argv)
     window.show();
 
     return app.exec();
-#endif
 }

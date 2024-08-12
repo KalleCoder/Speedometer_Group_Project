@@ -26,7 +26,8 @@ public:
     bool get_right_signal();
     bool get_warning_signal();
 
-    uint32_t buffer_extract(size_t bit_pos, size_t bit_length);
+    void extract(size_t bit_pos, size_t bit_length, uint32_t &value);
+    void extract(size_t bit_pos, size_t bit_length, int &value);
 
     bool get_status(); // Get the status of the communication
 
