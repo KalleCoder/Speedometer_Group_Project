@@ -31,7 +31,7 @@ public:
     bool get_status(); // Get the status of the communication
 
     virtual void run() = 0; // Receive the buffer over the communication protocol
-    virtual ~COMService() = 0;
+    virtual ~COMService() = default;
 };
 
 #endif // COMSERVICE_H
