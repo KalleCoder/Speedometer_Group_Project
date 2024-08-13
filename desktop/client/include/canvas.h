@@ -6,7 +6,6 @@
 #include <QFontDatabase>
 // include <QFile>
 #include <QDebug>
-#include <QMediaPlayer> // Use QMediaPlayer for Qt6
 
 #include <QString>
 
@@ -24,7 +23,6 @@ private:
     bool blinker_warning = false;
 
     bool blinker_visible = true;
-    // QMediaPlayer *blinkerSound; // Replace QSound with QMediaPlayer
 
     QPainter painter;
 

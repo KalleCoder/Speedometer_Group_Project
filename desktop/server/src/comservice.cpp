@@ -12,7 +12,7 @@ void COMService::set_Speed(int speed)
     std::lock_guard<std::mutex> lock(setter_mutex);
     buffer_insert(static_cast<uint32_t>(speed), Setting::Signal::Speed::start, Setting::Signal::Speed::length);
 
-    for (size_t i = 0; i < 4; ++i)
+    /* for (size_t i = 0; i < 4; ++i)
     {
         for (int j = 7; j >= 0; --j)
         {
@@ -20,7 +20,7 @@ void COMService::set_Speed(int speed)
         }
         std::cout << " ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl; */
 }
 
 void COMService::set_Temp(int temp)
@@ -28,7 +28,7 @@ void COMService::set_Temp(int temp)
     std::lock_guard<std::mutex> lock(setter_mutex);
     buffer_insert(static_cast<uint32_t>(temp), Setting::Signal::Temperature::start, Setting::Signal::Temperature::length);
 
-    for (size_t i = 0; i < 4; ++i)
+    /* for (size_t i = 0; i < 4; ++i)
     {
         for (int j = 7; j >= 0; --j)
         {
@@ -36,7 +36,7 @@ void COMService::set_Temp(int temp)
         }
         std::cout << " ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl; */
 }
 
 void COMService::set_battery_level(int percentage)
@@ -44,15 +44,15 @@ void COMService::set_battery_level(int percentage)
     std::lock_guard<std::mutex> lock(setter_mutex);
     buffer_insert(static_cast<uint32_t>(percentage), Setting::Signal::Battery::start, Setting::Signal::Battery::length); // HERE IS A PROBLEM!!
     // Debug output to check the buffer content
-    for (size_t i = 0; i < 4; ++i)
-    {
-        for (int j = 7; j >= 0; --j)
-        {
-            std::cout << ((buffer[i] >> j) & 1);
-        }
-        std::cout << " ";
-    }
-    std::cout << std::endl;
+    /*  for (size_t i = 0; i < 4; ++i)
+     {
+         for (int j = 7; j >= 0; --j)
+         {
+             std::cout << ((buffer[i] >> j) & 1);
+         }
+         std::cout << " ";
+     }
+     std::cout << std::endl; */
 }
 
 void COMService::set_left_signal(bool signal)
