@@ -7,8 +7,17 @@ Canvas::Canvas()
     // Initialize the QTimer making the blinker blink
     auto timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]()
-            { blinker_visible = !blinker_visible; });
+            { blinker_visible = !blinker_visible; 
+            // Play the sound effect for the blinker
+        /* if (blinkerSound) {
+            blinkerSound->play();
+        } */ });
     timer->start(500); // 500 milliseconds = 0.5 seconds
+
+    /*     // Initialize the QMediaPlayer object with the path to your sound file
+        blinkerSound = new QMediaPlayer(this);
+        blinkerSound->setSource(QUrl("qrc:/sounds/blinker.wav"));
+        blinkerSound->setVolume(0.5); // Adjust volume as needed */
 }
 
 void Canvas::set_speed(int speed)
