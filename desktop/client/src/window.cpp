@@ -5,6 +5,7 @@ Window::Window(COMService &comsrv) : comservice{comsrv}
 {
     setWindowTitle("client");
     setFixedSize(800, 560);
+    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
     // Set background color of the window
     setStyleSheet("background-color: rgb(60, 0, 70);");
