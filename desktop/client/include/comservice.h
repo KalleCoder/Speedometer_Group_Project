@@ -11,20 +11,22 @@
 class COMService
 {
 protected:
-    std::atomic<bool> communication_status = false;
+    std::atomic<bool> communication_status{false};
 
-    uint8_t buffer[Setting::Signal::Buffer::buffer_size]{0}; // PROTECT WITH MUTEX
+    uint8_t buffer[Settings::Signal::BUFSIZE]{0}; // Buffer size from Signal class
 
     std::mutex buffer_mutex; // Mutex to protect the buffer
-    std::mutex getter_mutex; // Mutex to protect the buffer
+
+    Settings::Signal &signal = Settings::Signal::instance();
 
 public:
     int get_speed();         // Read speed from the buffer
     int get_temperature();   // Read temperature from the buffer
     int get_battery_level(); // Read battery level from the buffer
-    bool get_left_signal();
-    bool get_right_signal();
-    bool get_warning_signal();
+
+    bool get_left_signal();    // Check left signal status
+    bool get_right_signal();   // Check right signal status
+    bool get_warning_signal(); // Check warning signal status
 
     void extract(size_t bit_pos, size_t bit_length, uint32_t &value);
     void extract(size_t bit_pos, size_t bit_length, int &value);
@@ -32,7 +34,6 @@ public:
     bool get_status(); // Get the status of the communication
 
     virtual void run() = 0; // Receive the buffer over the communication protocol
-    virtual ~COMService() = 0;
+    virtual ~COMService() = default;
 };
-
 #endif // COMSERVICE_H

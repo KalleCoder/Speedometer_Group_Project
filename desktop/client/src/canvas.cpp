@@ -1,23 +1,20 @@
 #include "canvas.h"
-#include <iostream>
-#include <QTimer>
+#include <QFileInfo>
 
 Canvas::Canvas()
 {
-    // Initialize the QTimer making the blinker blink
-    auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [this]()
-            { blinker_visible = !blinker_visible; 
-            // Play the sound effect for the blinker
-        /* if (blinkerSound) {
-            blinkerSound->play();
-        } */ });
-    timer->start(500); // 500 milliseconds = 0.5 seconds
+    // Set up the media player
+    player.setAudioOutput(&audioOutput);
 
-    /*     // Initialize the QMediaPlayer object with the path to your sound file
-        blinkerSound = new QMediaPlayer(this);
-        blinkerSound->setSource(QUrl("qrc:/sounds/blinker.wav"));
-        blinkerSound->setVolume(0.5); // Adjust volume as needed */
+    QFileInfo file(__FILE__);
+    QString dirPath = file.absolutePath() + "/../res/";
+
+    // Load the sound file
+    QUrl soundUrl = QUrl::fromLocalFile(dirPath + "turn-signals.wav");
+    player.setSource(soundUrl);
+    player.setLoops(QMediaPlayer::Infinite);
+    //  Set the volume and start playing
+    audioOutput.setVolume(0.5);
 }
 
 void Canvas::set_speed(int speed)
@@ -66,16 +63,7 @@ void Canvas::paintEvent(QPaintEvent *)
         paint_speed(class_speed);
         paint_battery(battery_percentage);
         paint_temperature(temperature);
-        // paint_light_signal(blinker_left, blinker_right, blinker_warning);
-
-        if (blinker_visible)
-        {
-            paint_light_signal(blinker_left, blinker_right, blinker_warning);
-        }
-        else
-        {
-            paint_light_signal(false, false, false);
-        }
+        paint_light_signal(blinker_left, blinker_right, blinker_warning);
     }
     else
     {
@@ -308,7 +296,7 @@ void Canvas::paint_battery(int charge)
         painter.setPen(QPen(Qt::red)); // Set pen color for the icon
         painter.setBrush(Qt::red);     // Set the fill color
     }
-    else if (charge > 25 && charge < 50)
+    else if (charge >= 25 && charge < 50)
     {
         painter.setPen(QPen(Qt::yellow)); // Set pen color for the icon
         painter.setBrush(Qt::yellow);     // Set the fill color
@@ -351,7 +339,7 @@ void Canvas::paint_temperature(int temp)
         painter.setPen(QPen(Qt::white)); // Set pen color for the icon
         painter.setBrush(Qt::white);     // Set the fill color
     }
-    else if (temp > 5 && temp < 40)
+    else if (temp >= 5 && temp < 40)
     {
         painter.setPen(QPen(Qt::blue)); // Set pen color for the icon
         painter.setBrush(Qt::blue);     // Set the fill color
@@ -379,17 +367,24 @@ void Canvas::paint_temperature(int temp)
 
 void Canvas::paint_light_signal(bool left, bool right, bool warning)
 {
+    static int counter{0};
+
+    if (warning || left || right)
+    {
+        counter = (counter + 1) % 20;
+    }
+    else
+    {
+        counter = 0;
+        player.stop();
+    }
+
     QFont font("Material Icons", 50);
     painter.setFont(font);
 
     painter.setPen(QPen(Qt::green));
 
-    std::cout << "Painting blinkers" << std::endl;
-    std::cout << "Left bool: " << left << std::endl;
-    std::cout << "Right bool: " << right << std::endl;
-    std::cout << "Warning bool: " << warning << std::endl;
-
-    if (warning == true)
+    if (warning == true && counter > 9)
     {
         // Define the battery icon character from Material Icons font
         QString left_icon = QChar(0xE5C4);
@@ -400,29 +395,25 @@ void Canvas::paint_light_signal(bool left, bool right, bool warning)
 
         painter.drawText(QPointF(580, 100), right_icon);
 
-        std::cout << "Painted warning blinker" << std::endl;
+        player.play();
     }
-    else if (left == true)
+    else if (left == true && counter > 9)
     {
         // Define the battery icon character from Material Icons font
         QString left_icon = QChar(0xE5C4); // Replace with actual Unicode if different
 
         painter.drawText(QPointF(50, 100), left_icon); // Adjust as needed
 
-        std::cout << "Painted left blinker" << std::endl;
+        player.play();
     }
-    else if (right == true)
+    else if (right == true && counter > 9)
     {
         // Define the battery icon character from Material Icons font
         QString right_icon = QChar(0xE5C8); // Replace with actual Unicode if different
 
         painter.drawText(QPointF(580, 100), right_icon); // Adjust as needed
 
-        std::cout << "Painted right blinker" << std::endl;
-    }
-    else
-    {
-        return;
+        player.play();
     }
 }
 

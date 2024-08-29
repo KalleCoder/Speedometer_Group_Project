@@ -1,6 +1,5 @@
 #include "window.h"
 
-// Window(COMService &comservise)
 Window::Window(COMService &comsrv) : comservice{comsrv}
 {
     setWindowTitle("client");
@@ -15,10 +14,14 @@ Window::Window(COMService &comsrv) : comservice{comsrv}
 
     layout.addWidget(&canvas); // Add the canvas directly to the layout
     setLayout(&layout);
+
+    QObject::connect(&timer, &QTimer::timeout, this, [this]()
+                     { this->updateCanvas(); });
+
+    timer.start(Settings::INTERVAL);
 }
 
-/// HERE YOU SHOULD USE THE COMSERVICE FUNCTIONS TO GET THE VALUES!
-void Window::update()
+void Window::updateCanvas()
 {
     canvas.set_connection_status(comservice.get_status());
     canvas.set_speed(comservice.get_speed());
@@ -27,4 +30,6 @@ void Window::update()
     canvas.set_blinker_left(comservice.get_left_signal());
     canvas.set_blinker_right(comservice.get_right_signal());
     canvas.set_blinker_warning(comservice.get_warning_signal());
+
+    canvas.update();
 }

@@ -4,14 +4,13 @@
 #include <QWidget>
 #include <QPainter>
 #include <QFontDatabase>
-// include <QFile>
-#include <QDebug>
-#include <QMediaPlayer> // Use QMediaPlayer for Qt6
-
 #include <QString>
 
-// here you make the parts for the window module!
-// here you use Qpaint
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QUrl>
+#include <QDebug>
+
 class Canvas : public QWidget
 {
 private:
@@ -24,9 +23,12 @@ private:
     bool blinker_warning = false;
 
     bool blinker_visible = true;
-    // QMediaPlayer *blinkerSound; // Replace QSound with QMediaPlayer
 
     QPainter painter;
+
+    // Initialize QMediaPlayer and QAudioOutput
+    QMediaPlayer player;
+    QAudioOutput audioOutput;
 
 public:
     Canvas();

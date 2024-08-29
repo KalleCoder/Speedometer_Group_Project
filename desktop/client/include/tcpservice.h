@@ -2,13 +2,25 @@
 #define TCPSERVICE_H
 
 #include "comservice.h"
+#include <atomic>
+#include <thread>
 
 class TCPService : public COMService
 {
-public:
+    std::atomic<bool> running{true};
+
+    std::thread thrd{&TCPService::run, this};
+
     void run() override;
 
-    void processReceivedData();
+public:
+    TCPService() = default;
+
+    ~TCPService()
+    {
+        running = false;
+        thrd.join();
+    }
 };
 
 #endif

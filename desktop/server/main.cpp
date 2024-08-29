@@ -1,34 +1,27 @@
-#include <QApplication>
 #include "window.h"
+
+#ifdef UART
+#include "serialservice.h"
+#else
 #include "tcpservice.h"
-#include <thread>
-#include <QTimer>
-#include <iostream>
+#endif
+
+#include <QApplication>
 
 int main(int argc, char **argv)
 {
-#ifdef TCP
+
     QApplication app(argc, argv);
 
+#ifdef UART
+    SerialService service;
+#else
     TCPService service;
-
-    Window window(service);
-    window.update();
-    window.show();
-
-    return app.exec();
 #endif
-#ifndef TCP
-    QApplication app(argc, argv);
-
-    TCPService service;
 
     Window window(service);
-    std::thread tcpThread(&TCPService::run, &service);
-    tcpThread.detach();
 
     window.show();
 
     return app.exec();
-#endif
 }

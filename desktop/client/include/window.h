@@ -5,6 +5,7 @@
 #include "comservice.h"
 #include <QDialog>
 #include <QVBoxLayout>
+#include <QTimer>
 
 // here you have an instance of canvas
 // making the layout
@@ -12,18 +13,15 @@
 // and use the canvas module to draw the information
 class Window : public QDialog
 {
+    QTimer timer;
     COMService &comservice;
-
-private:
     Canvas canvas;
     QVBoxLayout layout;
 
 public:
     Window(COMService &comsrv);
-    // Window();
 
-    void update();
-    // void update(COMService &comservice);
+    void updateCanvas();
 };
 
 #endif

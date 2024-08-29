@@ -1,80 +1,46 @@
 #include "comservice.h"
 #include "setting.h"
-#include <iostream>
-#include <algorithm>
-#include <bitset>
-#include <cstring>
 
-COMService::~COMService() = default; // Define the virtual destructor
-
-void COMService::set_Speed(int speed)
+// Set speed in the buffer
+void COMService::set_speed(int speed)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(speed), Setting::Signal::Speed::start, Setting::Signal::Speed::length);
-
-    /* for (size_t i = 0; i < 4; ++i)
-    {
-        for (int j = 7; j >= 0; --j)
-        {
-            std::cout << ((buffer[i] >> j) & 1);
-        }
-        std::cout << " ";
-    }
-    std::cout << std::endl; */
+    buffer_insert(static_cast<uint32_t>(speed), signal["speed"].start, signal["speed"].length);
 }
 
-void COMService::set_Temp(int temp)
+// Set temperature in the buffer
+void COMService::set_temperature(int temp)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(temp), Setting::Signal::Temperature::start, Setting::Signal::Temperature::length);
-
-    /* for (size_t i = 0; i < 4; ++i)
-    {
-        for (int j = 7; j >= 0; --j)
-        {
-            std::cout << ((buffer[i] >> j) & 1);
-        }
-        std::cout << " ";
-    }
-    std::cout << std::endl; */
+    buffer_insert(static_cast<uint32_t>(temp), signal["temperature"].start, signal["temperature"].length);
 }
 
-void COMService::set_battery_level(int percentage)
+// Set battery level in the buffer
+void COMService::set_battery_level(int battery_level)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(percentage), Setting::Signal::Battery::start, Setting::Signal::Battery::length); // HERE IS A PROBLEM!!
-    // Debug output to check the buffer content
-    /*  for (size_t i = 0; i < 4; ++i)
-     {
-         for (int j = 7; j >= 0; --j)
-         {
-             std::cout << ((buffer[i] >> j) & 1);
-         }
-         std::cout << " ";
-     }
-     std::cout << std::endl; */
+    buffer_insert(static_cast<uint32_t>(battery_level), signal["battery_level"].start, signal["battery_level"].length);
 }
 
-void COMService::set_left_signal(bool signal)
+// Set right signal status in the buffer
+void COMService::set_right_signal(bool right_signal)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(signal), Setting::Signal::Blinker_Left::start, Setting::Signal::Blinker_Left::length);
+    buffer_insert(static_cast<uint32_t>(right_signal), signal["right_light"].start, signal["right_light"].length);
 }
 
-void COMService::set_right_signal(bool signal)
+// Set left signal status in the buffer
+void COMService::set_left_signal(bool left_signal)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(signal), Setting::Signal::Blinker_Right::start, Setting::Signal::Blinker_Right::length);
+    buffer_insert(static_cast<uint32_t>(left_signal), signal["left_light"].start, signal["left_light"].length);
 }
 
-void COMService::set_warning_signal(bool signal)
+// Set warning signal status in the buffer
+void COMService::set_warning_signal(bool warning_signal)
 {
-    std::lock_guard<std::mutex> lock(setter_mutex);
-    buffer_insert(static_cast<uint32_t>(signal), Setting::Signal::Blinker_Warning::start, Setting::Signal::Blinker_Warning::length);
+    buffer_insert(static_cast<uint32_t>(warning_signal), signal["warning_light"].start, signal["warning_light"].length);
 }
 
+// Insert value into the buffer
 void COMService::buffer_insert(uint32_t value, size_t start_bit, size_t bit_length)
 {
+    std::scoped_lock<std::mutex> locker{buffer_mutex};
     size_t end_bit = start_bit + bit_length - 1;
 
     // Clear the target bits in the buffer
@@ -98,11 +64,4 @@ void COMService::buffer_insert(uint32_t value, size_t start_bit, size_t bit_leng
             buffer[byte_index] |= (1 << (7 - bit_index)); // Set the bit
         }
     }
-
-    for (int i = 0; i < 4; ++i)
-    {
-        std::bitset<8> bits(buffer[i]);
-        std::cout << bits << " ";
-    }
-    std::cout << std::endl;
 }
