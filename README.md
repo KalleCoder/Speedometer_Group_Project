@@ -1,4 +1,4 @@
-# Electric Car display
+# Dashboard for EV
 
 This is an embedded programming project with the task of teaching us real time communication via:
 1 Local network (TCP/IP)
